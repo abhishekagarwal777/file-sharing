@@ -1,0 +1,20 @@
+-- users table
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    email TEXT UNIQUE NOT NULL,
+    password TEXT NOT NULL
+);
+
+-- files table
+CREATE TABLE files (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id),
+    file_name TEXT NOT NULL,
+    upload_date TIMESTAMP DEFAULT NOW(),
+    file_size INTEGER,
+    s3_url TEXT
+);
+
+
+_, err = db.DB.Exec("INSERT INTO files (user_id, file_name, s3_url, upload_date, file_size) VALUES ($1, $2, $3, NOW(), $4)",
+    userID, header.Filename, fileURL, header.Size)
